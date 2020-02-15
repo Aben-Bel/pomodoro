@@ -23,8 +23,7 @@ public class Home {
     @FXML
     private Label title;
 
-    @FXML
-    private TextArea message;
+    @FXML private TextArea message;
 
     private Attempt mCurrentAttempt;
     private StringProperty mTimerText;
@@ -34,6 +33,7 @@ public class Home {
         mTimerText = new SimpleStringProperty();
         setTimerText(0);
         mApplause = new AudioClip(getClass().getResource("/sounds/applause.mp3").toExternalForm());
+
     }
 
     public String getTimerText() {
@@ -62,7 +62,7 @@ public class Home {
         setTimerText(mCurrentAttempt.getRemainingSeconds());
         mTimeline = new Timeline();
         mTimeline.setCycleCount(kind.getTotalSeconds());
-        mTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), e -> {
+        mTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1),e -> {
             mCurrentAttempt.tick();
             setTimerText(mCurrentAttempt.getRemainingSeconds());
         }));
@@ -81,16 +81,18 @@ public class Home {
 
     private void reset() {
         clearAttemptStyles();
-        if (mTimeline != null && mTimeline.getStatus() == Animation.Status.RUNNING) {
+        if (mTimeline != null && mTimeline.getStatus() == Animation.Status.RUNNING){
             mTimeline.stop();
         }
     }
 
-    public void playTimer() {
+    public void playTimer(){
+        container.getStyleClass().add("playing");
         mTimeline.play();
     }
 
-    public void pauseTimer() {
+    public void pauseTimer(){
+        container.getStyleClass().remove("playing");
         mTimeline.pause();
     }
 
@@ -99,6 +101,7 @@ public class Home {
     }
 
     private void clearAttemptStyles() {
+        container.getStyleClass().remove("playing");
         for (AttemptKind kind : AttemptKind.values()) {
             container.getStyleClass().remove(kind.toString().toLowerCase());
         }
@@ -107,5 +110,17 @@ public class Home {
     public void handleRestart(ActionEvent actionEvent) {
         prepareAttempt(AttemptKind.FOCUS);
         playTimer();
+    }
+
+    public void handlePlay(ActionEvent actionEvent) {
+        if (mCurrentAttempt == null){
+            handleRestart(actionEvent);
+        }else{
+            playTimer();
+        }
+    }
+
+    public void handlePause(ActionEvent actionEvent) {
+        pauseTimer();
     }
 }

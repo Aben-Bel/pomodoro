@@ -34,13 +34,13 @@ public class Attempt {
     @Override
     public String toString() {
         return "Attempt{" +
-                "mKind=" + mKind +
-                ", mMessage='" + mMessage + '\'' +
+                "mMessage='" + mMessage + '\'' +
                 ", mRemainingSeconds=" + mRemainingSeconds +
+                ", mKind=" + mKind +
                 '}';
     }
 
     public void save() {
-        System.out.printf("Saving: %s %n", this);
+        System.out.println("Saving: %s %n" + this);
     }
 }
